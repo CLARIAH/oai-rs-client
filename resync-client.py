@@ -21,6 +21,7 @@ def get_resource_lists(resources):
 		get_resources(resource_list.resources)
 
 
+# TODO: pass location of source description XML as argument
 source_desc_response = requests.get("http://localhost:8080/resourcesync")
 source_desc = SourceDescription()
 source_desc.parse(str=source_desc_response.text)
