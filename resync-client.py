@@ -31,28 +31,3 @@ capabilitylist = CapabilityList()
 capabilitylist.parse(str=capabilitylist_response.text)
 
 get_resource_lists(capabilitylist.resources)
-
-# <?xml version=\'1.0\' encoding=\'UTF-8\'?>
-# <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:rs="http://www.openarchives.org/rs/terms/">
-#  <rs:ln href="http://example.org/about" rel="describedby" />
-#  <rs:md capability="description" />
-#  <url>
-#   <loc>http://example.org/ds1/cl.xml</loc>
-#   <rs:md capability="capabilitylist" />
-#  </url>
-#  <url>
-#   <loc>http://example.org/ds2/cl.xml</loc>
-#   <rs:md capability="capabilitylist" />
-#  </url>
-#  <url>
-#   <loc>http://example.org/ds3/cl.xml</loc>
-#   <rs:md capability="capabilitylist" />
-#  </url>
-# </urlset>
-
-# <?xml version='1.0' encoding='UTF-8'?>
-# <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:rs="http://www.openarchives.org/rs/terms/">
-#  <rs:md capability="description" />
-#  <url>
-#   <loc>http://localhost:8080/capability-list.xml</loc>
-#<rs:md capability="capabilitylist" /></url></urlset>
