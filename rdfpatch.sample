@@ -999,4 +999,3 @@
 + <http://wordnet-rdf.princeton.edu/wn31/400461819-R> <http://wordnet-rdf.princeton.edu/ontology#translation> "saastaisesti"@fin <http://example.com/clariah> .
 + <http://wordnet-rdf.princeton.edu/wn31/ascend-v#1-v> <http://wordnet-rdf.princeton.edu/ontology#verb_frame_sentence> "The airplane is sure to %s "@eng <http://example.com/clariah> .
 + <http://wordnet-rdf.princeton.edu/wn31/201195306-V> <http://wordnet-rdf.princeton.edu/ontology#verb_group> <http://wordnet-rdf.princeton.edu/wn31/201195525-v> <http://example.com/clariah> .
-- <http://wordnet-rdf.princeton.edu/wn31/capacity-n#3-n> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://lemon-model.net/lemon#LexicalSense> <http://example.com/clariah> .

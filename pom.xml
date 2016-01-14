@@ -20,6 +20,11 @@
         </plugins>
     </build>
 
+    <properties>
+        <jettyVersion>9.1.6.v20160112</jettyVersion>
+    </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>org.semanticweb.yars</groupId>
@@ -27,7 +32,16 @@
             <version>2.2</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.8.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
     </dependencies>
 
 </project>

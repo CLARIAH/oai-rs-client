@@ -6,6 +6,22 @@ import org.semanticweb.yars.nx.Node;
 import java.io.IOException;
 
 public class SimpleQuad {
+  public Node getSubject() {
+    return subject;
+  }
+
+  public Node getPredicate() {
+    return predicate;
+  }
+
+  public Node getObject() {
+    return object;
+  }
+
+  public Node getGraphCtx() {
+    return graphCtx;
+  }
+
   private Node subject;
   private Node predicate;
   private Node object;
@@ -32,4 +48,6 @@ public class SimpleQuad {
 
     System.out.println("GraphCtx:" +   graphCtx.getLabel());
   }
+
+
 }
