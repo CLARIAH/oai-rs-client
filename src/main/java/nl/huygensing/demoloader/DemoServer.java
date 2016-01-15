@@ -26,17 +26,13 @@ public class DemoServer extends AbstractHandler {
     loader = new FlatSqLiteLoader(watchDir);
   }
 
-  private void startDaemon(Request baseRequest, HttpServletResponse response) throws IOException, SQLException {
-    response.setStatus(HttpServletResponse.SC_OK);
-    baseRequest.setHandled(true);
+  private void startDaemon() throws IOException, SQLException {
     if(!FlatSqLiteLoader.signal) {
       loader.startDaemon();
     }
   }
 
-  private void stopDaemon(Request baseRequest,  HttpServletResponse response) throws SQLException {
-    response.setStatus(HttpServletResponse.SC_OK);
-    baseRequest.setHandled(true);
+  private void stopDaemon() throws SQLException {
     loader.stopDaemon();
   }
 
@@ -53,38 +49,9 @@ public class DemoServer extends AbstractHandler {
           e.printStackTrace();
         }
         break;
-      case "/buttons":
-        writeButtons(baseRequest, response);
-        break;
-      case "/startdaemon":
-        try {
-          startDaemon(baseRequest, response);
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-        break;
-      case "/stopdaemon":
-        try {
-          stopDaemon(baseRequest, response);
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-        break;
       default: writeNotFound(baseRequest, response); break;
     }
 
-  }
-
-  private void writeButtons(Request baseRequest, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;charset=utf-8");
-    response.setStatus(HttpServletResponse.SC_OK);
-    baseRequest.setHandled(true);
-
-    if(FlatSqLiteLoader.signal) {
-      response.getWriter().println("<button onclick='stopSync()'>Stop syncing</button>");
-    } else {
-      response.getWriter().println("<button onclick='startSync()'>Start syncing</button>");
-    }
   }
 
   private void writeTable(Request baseRequest, HttpServletResponse response) throws IOException, SQLException {
@@ -125,13 +92,11 @@ public class DemoServer extends AbstractHandler {
     PrintWriter w = response.getWriter();
 
     w.println("<html><head><script src='https://code.jquery.com/jquery-1.12.0.min.js'></script></head><body>");
-    w.println("<h1>hello index</h1>");
-    w.println("<div id='buttons'></div>");
+    w.println("<h1>SQLite table contents</h1>");
     w.println("<div id='table'></div>");
     w.println("<script>");
     w.println("function poll() { " +
         "$.ajax('/table', { success: function(resp) { $('#table').html(resp) }});" +
-        "$.ajax('/buttons', { success: function(resp) { $('#buttons').html(resp) }});" +
         "setTimeout(poll, 1000); }"
     );
     w.println("function startSync() { $.ajax('/startdaemon'); }");
@@ -146,9 +111,10 @@ public class DemoServer extends AbstractHandler {
   public static void main(String[] args) throws Exception
   {
     FlatSqLiteLoader.setupTables();
-
+    DemoServer demoServer = new DemoServer(args[0]);
+    demoServer.startDaemon();
     Server server = new Server(8180);
-    server.setHandler(new DemoServer(args[0]));
+    server.setHandler(demoServer);
 
     server.start();
     server.join();

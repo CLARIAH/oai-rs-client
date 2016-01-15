@@ -57,7 +57,8 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
         });
 
         for (File f : files) {
-          System.err.println(f.getName());
+          if(f.length() == 0) { continue; }
+          System.out.println("PROCESSING FILE: " + f.getName());
           RdfPatchParser parser = new RdfPatchParser(new FileInputStream(f), this);
           parser.parse();
           connection.commit();
@@ -113,8 +114,8 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
   }
 
   private void deleteQuad(SimpleQuad quad) {
-//    System.out.println("Deleting quad: ");
-//    quad.dump();
+    System.out.println("Deleting quad: ");
+    quad.dump();
     try {
       PreparedStatement ps = connection.prepareStatement("DELETE FROM quads WHERE id=?");
       ps.setString(1, makeId(quad));
@@ -126,8 +127,8 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
   }
 
   private void addQuad(SimpleQuad quad) {
-//    System.out.println("Adding quad: ");
-//    quad.dump();
+    System.out.println("Adding quad: ");
+    quad.dump();
     try {
       PreparedStatement ps = connection.prepareStatement("INSERT INTO quads VALUES (?, ?, ?, ?, ?)");
       ps.setString(1, makeId(quad));

@@ -1,17 +1,17 @@
 #!/usr/bin/python
 
-
 from resync.source_description import SourceDescription
 from resync.capability_list import CapabilityList
 from resync.resource_list import ResourceList
 
 from argparse import ArgumentParser
 
+from time import sleep
 import dateutil.parser
 import requests
 import re
 import os.path
-
+import sys
 
 parser = ArgumentParser()
 parser.add_argument('--out-dir', required=True)
@@ -26,7 +26,7 @@ timefile = open(args.time_file)
 lasttime = dateutil.parser.parse(timefile.readline())
 timefile.close();
 
-print "Last resync: " + str(lasttime)
+print "Last resync resource modified date: " + str(lasttime)
 
 # Downloads resources and writes them to out_dir (filename = unix timestamp)
 # if their last modified time is greater than value of
@@ -62,8 +62,9 @@ def get_resources(resources):
 			out_file.write(response.text.encode('UTF-8'))
 			out_file.close()
 			print "Waiting for out_file to be processed: " + out_file_path
+			sys.stdout.flush()
 			while os.path.exists(out_file_path):
-				pass
+				sleep(0.05)
 
 	# store newest modified time of newest resource
 	new_lasttime = time_sorted_resources[-1]["time"].strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -96,6 +97,3 @@ capabilitylist.parse(str=capabilitylist_response.text)
 
 # Download resource lists obtained from capability list
 get_resource_lists(capabilitylist.resources)
-
-
-
