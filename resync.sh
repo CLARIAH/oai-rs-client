@@ -8,4 +8,8 @@ then
 	echo "Creating new time file with datetime: 2012-01-01T00:00:00Z"
 	echo "2012-01-01T00:00:00Z" > pyres/lasttime.txt
 fi
-./resync-client.py --out-dir ~/tmp/watchdir/ --time-file pyres/lasttime.txt --source-description-uri http://localhost:8080/resourcesync
+./resync-client.py \
+	--out-dir ~/tmp/watchdir \
+	--time-file ./pyres/lasttime.txt \
+	--source-description-uri http://localhost:8080/resourcesync \
+	--backup-dir ./pyres

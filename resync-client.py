@@ -9,10 +9,14 @@ from argparse import ArgumentParser
 
 import dateutil.parser
 import requests
+import re
+import os.path
+
 
 parser = ArgumentParser()
 parser.add_argument('--out-dir', required=True)
 parser.add_argument('--time-file', required=True)
+parser.add_argument('--backup-dir', required=True)
 parser.add_argument('--source-description-uri', required=True)
 args = parser.parse_args()
 
@@ -29,20 +33,40 @@ print "Last resync: " + str(lasttime)
 # lasttime (obtained from --time-file)
 # and writes new_lasttime to --time-file
 def get_resources(resources):
-	times = []
+
+	# sort resources by last modified time
+	time_sorted_resources = []
 	for key, resource in resources.iteritems():
 		resource_mod_time = dateutil.parser.parse(resource.lastmod)
-		times.append(resource_mod_time)
-		print "TODO fetch if date is new: " + str(dateutil.parser.parse(resource.lastmod))
-		print "this URI: " + resource.uri
-		print "to dir: " + args.out_dir
-		resource_response = requests.get(resource.uri)
+		time_sorted_resources.append({"time": resource_mod_time, "resource": resource})
 
+	time_sorted_resources = sorted(time_sorted_resources, key=lambda k: k["time"])
 
-	# sort all resource times
-	times = sorted(times)
-	# last index is the time of the last modified resource
-	new_lasttime = times[-1].strftime("%Y-%m-%dT%H:%M:%SZ")
+	# write all new resources
+	for res in time_sorted_resources:
+		if lasttime < res["time"]:
+			outfile_name = re.sub(r"^.*\/", "", res["resource"].uri)
+			backup_file_path = args.backup_dir + "/" + outfile_name
+			out_file_path = args.out_dir + "/" + outfile_name
+
+			print "\n---"
+			print "Writing new file: (" + str(res["time"]) + " > " + str(lasttime) + ")"
+			print "this URI: " + res["resource"].uri
+			print "to dir: " + out_file_path
+			print "and to backup dir: " + backup_file_path
+			response = requests.get(resource.uri)
+			backup_file = open(backup_file_path, "w")
+			backup_file.write(response.text.encode('UTF-8'))
+			backup_file.close()
+			out_file = open(out_file_path, "w")
+			out_file.write(response.text.encode('UTF-8'))
+			out_file.close()
+			print "Waiting for out_file to be processed: " + out_file_path
+			while os.path.exists(out_file_path):
+				pass
+
+	# store newest modified time of newest resource
+	new_lasttime = time_sorted_resources[-1]["time"].strftime("%Y-%m-%dT%H:%M:%SZ")
 	# write this time to the timefile
 	timefile_out = open(args.time_file, "w")
 	timefile_out.write(new_lasttime)

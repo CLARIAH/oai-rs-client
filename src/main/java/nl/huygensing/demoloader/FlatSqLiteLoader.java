@@ -48,11 +48,11 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
       connection.setAutoCommit(false);
       while (signal) {
         File[] files = watchDir.listFiles();
-        // Sort the list of files by name (should be a UNIX timestamp)
+        // Sort the list of files by name (assumes filename formatting with date)
         Arrays.sort(files, new Comparator<File>() {
           @Override
           public int compare(File file, File t1) {
-            return Integer.parseInt(file.getName()) - Integer.parseInt(t1.getName());
+            return file.getName().compareTo(t1.getName());
           }
         });
 
