@@ -26,7 +26,7 @@ timefile = open(args.time_file)
 lasttime = dateutil.parser.parse(timefile.readline())
 timefile.close();
 
-print "Last resync resource modified date: " + str(lasttime)
+print "(resync-client.py): Last resync resource modified date: " + str(lasttime)
 
 # Downloads resources and writes them to out_dir (filename = unix timestamp)
 # if their last modified time is greater than value of
@@ -50,10 +50,10 @@ def get_resources(resources):
 			out_file_path = args.out_dir + "/" + outfile_name
 
 			print "\n---"
-			print "Writing new file: (" + str(res["time"]) + " > " + str(lasttime) + ")"
-			print "this URI: " + res["resource"].uri
-			print "to dir: " + out_file_path
-			print "and to backup dir: " + backup_file_path
+			print "(resync-client.py): Writing new file: (" + str(res["time"]) + " > " + str(lasttime) + ")"
+			print "(resync-client.py): this URI: " + res["resource"].uri
+			print "(resync-client.py): to dir: " + out_file_path
+			print "(resync-client.py): and to backup dir: " + backup_file_path
 			response = requests.get(resource.uri)
 			backup_file = open(backup_file_path, "w")
 			backup_file.write(response.text.encode('UTF-8'))
@@ -61,7 +61,7 @@ def get_resources(resources):
 			out_file = open(out_file_path, "w")
 			out_file.write(response.text.encode('UTF-8'))
 			out_file.close()
-			print "Waiting for out_file to be processed: " + out_file_path
+			print "(resync-client.py): Waiting for out_file to be processed: " + out_file_path
 			sys.stdout.flush()
 			while os.path.exists(out_file_path):
 				sleep(0.05)

@@ -42,7 +42,7 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
 
   @Override
   public void run() {
-    System.out.println("run invoked");
+    System.out.println("(FlatSqLiteLoader.java) syncing files");
     try {
       connection = DriverManager.getConnection("jdbc:sqlite:demo.db");
       connection.setAutoCommit(false);
@@ -58,7 +58,7 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
 
         for (File f : files) {
           if(f.length() == 0) { continue; }
-          System.out.println("PROCESSING FILE: " + f.getName());
+          System.out.println("(FlatSqLiteLoader.java) PROCESSING FILE: " + f.getName());
           RdfPatchParser parser = new RdfPatchParser(new FileInputStream(f), this);
           parser.parse();
           connection.commit();
@@ -109,13 +109,13 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
       case ADD: addQuad(instruction.getSimpleQuad()); break;
       case DELETE: deleteQuad(instruction.getSimpleQuad()); break;
       case COMMENT:
-      default: System.out.println("Ignoring comment " + instruction.getCommentLine());
+      default: System.out.println("(FlatSqLiteLoader.java): Ignoring comment " + instruction.getCommentLine());
     }
   }
 
   private void deleteQuad(SimpleQuad quad) {
-    System.out.println("Deleting quad: ");
-    quad.dump();
+//    System.out.println("Deleting quad: ");
+//    quad.dump();
     try {
       PreparedStatement ps = connection.prepareStatement("DELETE FROM quads WHERE id=?");
       ps.setString(1, makeId(quad));
@@ -127,8 +127,8 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
   }
 
   private void addQuad(SimpleQuad quad) {
-    System.out.println("Adding quad: ");
-    quad.dump();
+//    System.out.println("Adding quad: ");
+//    quad.dump();
     try {
       PreparedStatement ps = connection.prepareStatement("INSERT INTO quads VALUES (?, ?, ?, ?, ?)");
       ps.setString(1, makeId(quad));
