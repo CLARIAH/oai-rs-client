@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
   private final File watchDir;
@@ -46,7 +48,16 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
       connection.setAutoCommit(false);
       while (signal) {
         File[] files = watchDir.listFiles();
+        // Sort the list of files by name (should be a UNIX timestamp)
+        Arrays.sort(files, new Comparator<File>() {
+          @Override
+          public int compare(File file, File t1) {
+            return Integer.parseInt(file.getName()) - Integer.parseInt(t1.getName());
+          }
+        });
+
         for (File f : files) {
+          System.err.println(f.getName());
           RdfPatchParser parser = new RdfPatchParser(new FileInputStream(f), this);
           parser.parse();
           connection.commit();
@@ -102,8 +113,8 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
   }
 
   private void deleteQuad(SimpleQuad quad) {
-    System.out.println("Deleting quad: ");
-    quad.dump();
+//    System.out.println("Deleting quad: ");
+//    quad.dump();
     try {
       PreparedStatement ps = connection.prepareStatement("DELETE FROM quads WHERE id=?");
       ps.setString(1, makeId(quad));
@@ -115,8 +126,8 @@ public class FlatSqLiteLoader implements RdfPatchInstructionHandler, Runnable {
   }
 
   private void addQuad(SimpleQuad quad) {
-    System.out.println("Adding quad: ");
-    quad.dump();
+//    System.out.println("Adding quad: ");
+//    quad.dump();
     try {
       PreparedStatement ps = connection.prepareStatement("INSERT INTO quads VALUES (?, ?, ?, ?, ?)");
       ps.setString(1, makeId(quad));
