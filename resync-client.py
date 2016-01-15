@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python
 
 from resync.source_description import SourceDescription
 from resync.capability_list import CapabilityList

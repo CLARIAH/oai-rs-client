@@ -16,7 +16,6 @@ then
 fi
 
 # install and run jetty server for sqlite loader
-mvn clean install
 mvn exec:java -Dexec.mainClass="nl.huygensing.demoloader.DemoServer" -Dexec.args="./watchdir" &
 SRV_PID=$!
 
