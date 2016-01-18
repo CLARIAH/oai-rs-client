@@ -24,7 +24,8 @@ function ctrl_c() {
 }
 trap ctrl_c EXIT
 
-sleep 5
+sleep 10
+
 
 # run resync loop
 while true
@@ -32,7 +33,7 @@ do
 	./resync-client.py \
 		--out-dir ./watchdir \
 		--time-file ./pyres/lasttime.txt \
-		--source-description-uri http://localhost:8080/resourcesync \
+		--source-description-uri http://$NGINX_PORT_80_TCP_ADDR:$NGINX_PORT_80_TCP_PORT/resourcesync \
 		--backup-dir ./pyres
 	sleep 3
 done
