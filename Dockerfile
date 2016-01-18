@@ -50,10 +50,12 @@ VOLUME /root/.m2
 RUN pip install resync
 RUN pip install requests
 
-COPY . /
+COPY ./src /src
+COPY ./resync-client.py /
+COPY ./resync.sh /
+COPY ./pom.xml /
 
 RUN mvn clean install
-
-
+EXPOSE 8180
 
 ENTRYPOINT ["/resync.sh"]
