@@ -54,7 +54,7 @@ def get_resources(resources):
 			print "(resync-client.py): this URI: " + res["resource"].uri
 			print "(resync-client.py): to dir: " + out_file_path
 			print "(resync-client.py): and to backup dir: " + backup_file_path
-			response = requests.get(resource.uri)
+			response = requests.get(res["resource"].uri)
 			backup_file = open(backup_file_path, "w")
 			backup_file.write(response.text.encode('UTF-8'))
 			backup_file.close()
