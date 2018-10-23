@@ -23,7 +23,7 @@
     </build>
 
     <properties>
-        <jettyVersion>9.2.25.v20180606</jettyVersion>
+        <jettyVersion>9.3.24.v20180605</jettyVersion>
     </properties>
 
 
